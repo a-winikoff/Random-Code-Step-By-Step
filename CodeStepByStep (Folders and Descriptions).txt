@@ -1,0 +1,42 @@
+Java(6/691)
+  Programming practice in Java at a CS1 and CS2 (first and second-course) introductory level.
+  algorithms(44)
+    These are miscellaneous problems involving various concepts and algorithms. These are intentionally not categorized by concepts (such as array, string, list, tree, recursion, etc.) so that you must consider for yourself the best way to solve the problem. This category might be useful when studying for a coding interview.
+  arrays(66)
+    multi-dimensional arrays(14)
+      Exercises involving 2D arrays and image pixels.
+  backtracking(41)
+  bigoh(11)
+  classes and objects(13)
+  collections(2/99)
+    Using pre-existing collections from the java.util collection framework.
+    ArrayList(2/39)
+    Stack and Queue(16)
+    List(2)
+      These problems involve the List interface, which can refer to a linked list or array list.
+    Set(11)
+    Map(31)
+  collection implementation(82)
+    Implementing our own collections from scratch.
+    ArrayIntList(5)
+      Implementing our own version of Java's ArrayList that stores only integers for simplicity.
+    binary trees(27)
+    hashing(8)
+    linked lists(42)
+      generic(3)
+        Linked lists that use generics, AKA type parameterization.
+  console output(20)
+  critters(13)
+  DrawingPanel(10)
+    Practice using the DrawingPanel library created by Reges/Stepp.
+  dynamic programming(16)
+  expressions(18)
+  file IO(28)
+  if else(19)
+  inheritance(1/7)
+  loops(42)
+  parameters and return(47)
+  recursion(3/57)
+  searching(8)
+  sorting(11)
+  strings(39)
