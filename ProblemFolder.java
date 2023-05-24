@@ -7,10 +7,11 @@ public class ProblemFolder{
   private int totalDone;
   private int total;
   private String description;
+  private final int lineNum; // Line of initial instantiation
   private ProblemFolder parent; //For subfolders only, null for RootProblemFolder
 
 // All instantiation methods
-  public ProblemFolder(ProblemFolder p, String name, int done, int total){
+  public ProblemFolder(ProblemFolder p, String name, int done, int total, int linum){
     parent = p;
     this.name = name;
     totalDone = done;
@@ -18,6 +19,7 @@ public class ProblemFolder{
     description = "No description included.";
     subfolders = new ArrayList<>();
     problems = new ArrayList<>();
+    lineNum = linum;
   }
   public ProblemFolder getParent(){
     return parent;
@@ -35,6 +37,9 @@ public class ProblemFolder{
   public int size(){
     return total;
   }
+  public int getLine(){
+    return lineNum;
+  }
 
 // Other methods
   public String getName(){
@@ -50,7 +55,7 @@ public class ProblemFolder{
     return totalDone;
   }
   public String toString(){
-    return "Subfolder: " + name + "(" + ((totalDone!=0)?totalDone+"/":"") + total + ")";
+    return name + "(" + ((totalDone!=0)?totalDone+"/":"") + total + ")";
   }
 
 // String manipulation methods

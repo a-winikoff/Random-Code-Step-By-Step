@@ -20,8 +20,8 @@ class Main {
 
     RootProblemFolder folder = new RootProblemFolder(file);
     int count = 1;
-    System.out.println(folder.getAllProblems("ArrayList").size());
-    for (Problem problem:folder.getAllProblems("ArrayList"))
+    System.out.println(folder.getAllProblems("collection implementation").size());
+    for (Problem problem:folder.getAllProblems("collection implementation"))
       System.out.println(count++ + ": " + problem);
   }
 }
