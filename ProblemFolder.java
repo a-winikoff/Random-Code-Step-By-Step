@@ -1,14 +1,14 @@
 import java.util.*;
 
 public class ProblemFolder{
-  private ArrayList<ProblemFolder> subfolders;
-  private ArrayList<Problem> problems;
-  private String name;
-  private int totalDone;
-  private int total;
+  private List<ProblemFolder> subfolders;
+  private List<Problem> problems;
+  private final String name;
+  private final int totalDone;
+  private final int total;
   private String description;
   private final int lineNum; // Line of initial instantiation
-  private ProblemFolder parent; //For subfolders only, null for RootProblemFolder
+  private final ProblemFolder parent; //For subfolders only, null for RootProblemFolder
 
 // All instantiation methods
   public ProblemFolder(ProblemFolder p, String name, int done, int total, int linum){
@@ -45,11 +45,14 @@ public class ProblemFolder{
   public String getName(){
     return name;
   }
-  public ArrayList<Problem> getProblems(){
+  public List<Problem> getProblems(){
     return problems;
   }
-  public ArrayList<ProblemFolder> getSubfolders(){
+  public List<ProblemFolder> getSubfolders(){
     return subfolders;
+  }
+  public String getDescription(){
+    return description;
   }
   public int getDone(){
     return totalDone;

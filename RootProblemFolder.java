@@ -1,21 +1,25 @@
 import java.util.*;
 import java.util.stream.Collectors;
+import java.nio.file.*;
+import java.io.*;
 
 public class RootProblemFolder extends ProblemFolder{
-  private String[] text;
-  private ArrayList<Problem> all = new ArrayList<>();
-  private ArrayList<ProblemFolder> folders = new ArrayList<>();
-  private final ArrayList<String> folderNames;
+  private List<String> text;
+  private List<Problem> all = new ArrayList<>();
+  private List<ProblemFolder> folders = new ArrayList<>();
+  private final List<String> folderNames;
+  private final String path;
 
 // Instantiation
-  public RootProblemFolder(String[] lines){
-    super(null, lines[0].substring(0,lines[0].indexOf("(")), Integer.parseInt(lines[0].substring(lines[0].indexOf("(")+1,lines[0].indexOf("/"))), Integer.parseInt(lines[0].substring(lines[0].indexOf("/")+1,lines[0].indexOf(")"))), 0); // Lines 0 and 1
-    text = lines;
-    this.addDescription(lines[1]);
+  public RootProblemFolder(String path) throws java.io.IOException{
+    super(null, line0(path).substring(0,line0(path).indexOf("(")), Integer.parseInt(line0(path).substring(line0(path).indexOf("(")+1,line0(path).indexOf("/"))), Integer.parseInt(line0(path).substring(line0(path).indexOf("/")+1,line0(path).indexOf(")"))), 0); // Lines 0 and 1
+    this.path = path;
+    text = Files.readAllLines(Paths.get(path));
+    this.addDescription(text.get(1));
     ProblemFolder currentFolder = this;
     folders.add(this);
 
-    String line = removeFrontSpaces(lines[2]); // Line 2
+    String line = removeFrontSpaces(text.get(2)); // Line 2
     if (line.substring(line.length()-5).contains("/"))
       currentFolder = new ProblemFolder(this, line.substring(0,line.indexOf("(")), Integer.parseInt(line.substring(line.indexOf("(")+1,line.indexOf("/"))), Integer.parseInt(line.substring(line.indexOf("/")+1,line.indexOf(")"))), 2);
     else
@@ -23,8 +27,8 @@ public class RootProblemFolder extends ProblemFolder{
     this.addFolder(currentFolder);
     folders.add(currentFolder);
     
-    for (int l=3; l<lines.length; l++){ // All remaining lines
-      line = removeFrontSpaces(lines[l]);
+    for (int l=3; l<text.size(); l++){ // All remaining lines
+      line = removeFrontSpaces(text.get(l));
       if (line.substring(line.length()-1).equals(")")){ // Line is a subfolder
         while (currentFolder.getParent()!=null){ // Make currentFolder be the parent folder to the folder instantiated by this line of input
           int subSize = currentFolder.getProblems().size();
@@ -54,14 +58,24 @@ public class RootProblemFolder extends ProblemFolder{
           p.complete();
         currentFolder.addProblem(p);
         all.add(p);
+
+        // If there are more problems that are in the parent folder, but not in this folder
+        while (currentFolder.size()==currentFolder.getProblems().size())
+          currentFolder = currentFolder.getParent();
       }
     }
 
     folderNames = folders.stream().map(f -> f.getName()).collect(Collectors.toList());
   }
+  public static String line0(String filepath) throws java.io.IOException{
+    BufferedReader reader = new BufferedReader(new FileReader(new File(filepath)));
+    String line = reader.readLine();
+    reader.close();
+    return line;
+  }
 
 // ProblemFolder usable methods
-  public ProblemFolder findProblemFolder(String n){
+  public ProblemFolder getProblemFolder(String n){
     ProblemFolder pf = null;
     for (ProblemFolder f:folders)
       if (f.getName().equals(n)){
@@ -72,23 +86,23 @@ public class RootProblemFolder extends ProblemFolder{
       return null;
     return pf;
   }
-  public ArrayList<Problem> getProblems(String n){
-    ProblemFolder pf = findProblemFolder(n);
+  public List<Problem> getProblems(String n){
+    ProblemFolder pf = getProblemFolder(n);
     if (pf==null)
       return null;
     return pf.getProblems();
   }
-  public ArrayList<Problem> getAllProblems(){
+  public List<Problem> getAllProblems(){
     return all;
   }
-  public ArrayList<Problem> getAllProblems(String n){
-    ProblemFolder pf = findProblemFolder(n);
+  public List<Problem> getAllProblems(String n){
+    ProblemFolder pf = getProblemFolder(n);
     if (pf==null)
       return null;
     return getAllProblems(pf);
   }
-  public ArrayList<Problem> getAllProblems(ProblemFolder pf){
-    ArrayList<Problem> ps = new ArrayList<>();
+  public List<Problem> getAllProblems(ProblemFolder pf){
+    List<Problem> ps = new ArrayList<>();
     if (pf.getProblems().size()!=0||pf.getSubfolders().size()!=0){
       ps.addAll(pf.getProblems());
       for (ProblemFolder pfs:pf.getSubfolders())
@@ -96,15 +110,15 @@ public class RootProblemFolder extends ProblemFolder{
     }
     return ps;
   }
-  public ArrayList<String> getFolderNames(){
-    return folderNames.clone();
+  public List<String> getFolderNames(){
+    return new ArrayList<>(folderNames);
   }
-  public ArrayList<String> getFolderNamesLower(){
+  public List<String> getFolderNamesLower(){
     return folderNames.stream().map(s -> s.toLowerCase()).collect(Collectors.toList());
   }
 
 // Text manipulation methods
-  public String[] getText(){
+  public List<String> getText(){
     return text;
   }
   private void updateAllLines(Problem p){
@@ -116,14 +130,14 @@ public class RootProblemFolder extends ProblemFolder{
     }
   }
   private void updateLine(ProblemFolder pf){
-    text[pf.getLine()] = pf.toString();
+    text.set(pf.getLine(), pf.toString());
   }
   private void updateLine(Problem p){
-    text[p.getLine()] = p.toString();
+    text.set(p.getLine(), p.toString());
   }
 
 // Main random problem methods
-  public void simulateRandomProblem(){
+  public void simulateRandomProblem() throws java.io.IOException{
     Scanner input = new Scanner(System.in);
     if (!simYN(input, "Would you like to get a random problem? (y/n): ", true))
       return;
@@ -150,7 +164,8 @@ public class RootProblemFolder extends ProblemFolder{
     if (simYN(input, "Mark problem as completed? (y/n): ", false)){
       problem.complete();
       updateAllLines(problem);
-      /////////////////////////////////////////////Method to update the original file
+      updateFile();
+      System.out.println("Updated file.");
     }
     input.close();
     System.out.println("\n\n");
@@ -160,15 +175,18 @@ public class RootProblemFolder extends ProblemFolder{
     return getRandomProblem(this);
   }
   public Problem getRandomProblem(String folderName){
-    return getRandomProblem(findProblemFolder(folderName));
+    return getRandomProblem(getProblemFolder(folderName));
   }
   public Problem getRandomProblem(ProblemFolder pf){
-    ArrayList<Problem> problems = getAllProblems(pf);
+    List<Problem> problems = getAllProblems(pf);
     Collections.shuffle(problems);
     for (Problem p:problems)
       if (!p.isDone())
         return p;
     return null;
+  }
+  public void updateFile() throws java.io.IOException{
+    Files.write(Paths.get(path), text);
   }
   public boolean simYN(Scanner input, String message, boolean supportsBreaks){
     String read = "";
@@ -196,5 +214,17 @@ public class RootProblemFolder extends ProblemFolder{
         return "";
     }
     return read;
+  }
+  public void resetInputFile() throws java.io.IOException{
+    Scanner input = new Scanner(System.in);
+    if (!simYN(input, "Are you sure you would like to reset the input text file to the default? (y/n): ", true))
+      return;
+    input.close();
+    System.out.println("Resetting text file...");
+
+    text = Files.readAllLines(Paths.get("CodeStepByStep (base).txt"));
+    updateFile();
+
+    System.out.println("\nFile reset to default.\nRestart program for changes to reflect.");
   }
 }

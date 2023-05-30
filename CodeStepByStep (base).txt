@@ -1,4 +1,4 @@
-Java(5/691)
+Java(691)
 Programming practice in Java at a CS1 and CS2 (first and second-course) introductory level.
 algorithms(44)
 These are miscellaneous problems involving various concepts and algorithms. These are intentionally not categorized by concepts (such as array, string, list, tree, recursion, etc.) so that you must consider for yourself the best way to solve the problem. This category might be useful when studying for a coding interview.
@@ -183,13 +183,13 @@ classes and objects(13)
  PointErrors
  Student
  TimeSpan
-collections(2/99)
+collections(99)
 Using pre-existing collections from the java.util collection framework.
-ArrayList(2/39)
+ArrayList(39)
  acronymFor
  addStars
- arrayListMystery1{}
- arrayListMystery2{}
+ arrayListMystery1
+ arrayListMystery2
  arrayListMystery3
  arrayListMystery4
  arrayListMystery5
@@ -336,7 +336,7 @@ hashing(8)
  hashMapAddMystery1
  LruCache
  PurchaseOrderHashCode
-linked lists(39)
+linked lists(42)
 generic(3)
  countDuplicates
  count
@@ -512,10 +512,10 @@ if else(19)
  seeMovie
  spending
  sumTo
-inheritance(1/7)
+inheritance(7)
  Custodian
  StanfordLawyer
- inheritanceMystery1{}
+ inheritanceMystery1
  inheritanceMystery2
  inheritanceMystery3
  inheritanceMystery4
@@ -611,7 +611,7 @@ parameters and return(47)
  sumOfRange
  threeConsecutive
  triangle
-recursion(2/57)
+recursion(57)
  collapseSequences
  countToBy
  crawl
@@ -619,12 +619,12 @@ recursion(2/57)
  digitSum
  editDistance
  escapeMaze
- evenDigits{}
+ evenDigits
  factorial
- hanoi{}
+ hanoi
  hashString
  indexOf
- isPalindrome{}
+ isPalindrome
  isSubsequence
  matchCount
  mergeDigitPairs

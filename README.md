@@ -1,1 +1,4 @@
+This is a program built to randomly choose a problem from the coding practice website, codestepbystep.com, under the java category. Users can copy/paste the text of all of their problems into CodeStepByStep.txt (or from the included base file), and denote all of their completed problems in the file using "{}" placed at the end (see original code for example).
+Simply run the program to select and complete random problems (with an optional specification for a certain folder).
+
 [![Run on Repl.it](https://replit.com/badge/github/a-winikoff/Random-Code-Step-By-Step)](https://replit.com/new/github/a-winikoff/Random-Code-Step-By-Step)

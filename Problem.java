@@ -1,7 +1,7 @@
 public class Problem{
-  private String name;
+  private final String name;
   private boolean completed;
-  private ProblemFolder parent;
+  private final ProblemFolder parent;
   private final int lineNum;
 
   public Problem(String name, ProblemFolder p, int linum){
