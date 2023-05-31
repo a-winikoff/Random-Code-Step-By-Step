@@ -13,7 +13,7 @@ public class RootProblemFolder extends ProblemFolder{
 
 // Instantiation
   public RootProblemFolder(String path) throws java.io.IOException{
-    super(null, line0(path).substring(0,line0(path).indexOf("(")), Integer.parseInt(line0(path).substring(line0(path).indexOf("(")+1,line0(path).indexOf("/"))), Integer.parseInt(line0(path).substring(line0(path).indexOf("/")+1,line0(path).indexOf(")"))), 0); // Lines 0 and 1
+    super(null, line0(path).substring(0,line0(path).indexOf("(")), getDone(line0(path)), getTotal(line0(path)), 0); // Lines 0 and 1
     this.path = path;
     text = Files.readAllLines(Paths.get(path));
     this.addDescription(text.get(1));
@@ -77,6 +77,16 @@ public class RootProblemFolder extends ProblemFolder{
     String line = reader.readLine();
     reader.close();
     return line;
+  }
+  private static int getDone(String line){
+    if (line.indexOf("/")==-1)
+      return 0;
+    return Integer.parseInt(line.substring(line.indexOf("(")+1,line.indexOf("/")));
+  }
+  private static int getTotal(String line){
+    if (line.indexOf("/")==-1)
+      return Integer.parseInt(line.substring(line.indexOf("(")+1,line.indexOf(")")));
+    return Integer.parseInt(line.substring(line.indexOf("/")+1,line.indexOf(")")));
   }
 
 // ProblemFolder usable methods
