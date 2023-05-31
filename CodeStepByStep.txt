@@ -1,4 +1,4 @@
-Java(5/691)
+*Java(5/691)
 Programming practice in Java at a CS1 and CS2 (first and second-course) introductory level.
 algorithms(44)
 These are miscellaneous problems involving various concepts and algorithms. These are intentionally not categorized by concepts (such as array, string, list, tree, recursion, etc.) so that you must consider for yourself the best way to solve the problem. This category might be useful when studying for a coding interview.

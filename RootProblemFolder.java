@@ -8,6 +8,7 @@ public class RootProblemFolder extends ProblemFolder{
   private List<Problem> all = new ArrayList<>();
   private List<ProblemFolder> folders = new ArrayList<>();
   private final List<String> folderNames;
+  private HashMap<String, ProblemFolder> lowerNameToFolder = new HashMap<>();
   private final String path;
 
 // Instantiation
@@ -66,6 +67,10 @@ public class RootProblemFolder extends ProblemFolder{
     }
 
     folderNames = folders.stream().map(f -> f.getName()).collect(Collectors.toList());
+
+    List<String> lowers = getFolderNamesLower();
+    for (int n=0; n<folderNames.size(); n++)
+      lowerNameToFolder.put(lowers.get(n), folders.get(n++));
   }
   public static String line0(String filepath) throws java.io.IOException{
     BufferedReader reader = new BufferedReader(new FileReader(new File(filepath)));
@@ -75,16 +80,10 @@ public class RootProblemFolder extends ProblemFolder{
   }
 
 // ProblemFolder usable methods
-  public ProblemFolder getProblemFolder(String n){
-    ProblemFolder pf = null;
-    for (ProblemFolder f:folders)
-      if (f.getName().equals(n)){
-        pf = f;
-        break;
-      }
-    if (pf==null)
+  public ProblemFolder getProblemFolder(String s){
+    if (!lowerNameToFolder.containsKey(s.toLowerCase()))
       return null;
-    return pf;
+    return lowerNameToFolder.get(s.toLowerCase());
   }
   public List<Problem> getProblems(String n){
     ProblemFolder pf = getProblemFolder(n);
@@ -135,40 +134,46 @@ public class RootProblemFolder extends ProblemFolder{
   private void updateLine(Problem p){
     text.set(p.getLine(), p.toString());
   }
+  public static void p(){
+    System.out.println();
+  }
+  public static void p(String s){
+    System.out.println(s);
+  }
 
 // Main random problem methods
   public void simulateRandomProblem() throws java.io.IOException{
-    Scanner input = new Scanner(System.in);
-    if (!simYN(input, "Would you like to get a random problem? (y/n): ", true))
-      return;
+    if (!simYN("\nWould you like to get a random problem? (y/n): ", true)){
+      p();
+      return;}
     String folder = "Java";
-    if (simYN(input, "Would you like to choose a folder? (y/n): ", false))
+    if (simYN("Would you like to choose a folder? (y/n): ", false))
       while (true){
-        folder = simString(input, "Within which folder is the problem? (or \'exit\'): ", true);
-        if (folder.equals(""))
-          return;
+        folder = simString("Within which folder is the problem? (or \'exit\'): ", true);
+        if (folder.equals("")){
+          p();
+          return;}
         if (!getFolderNamesLower().contains(folder.toLowerCase()))
-          System.out.println("Folder does not exist.");
+          p("Folder does not exist.");
         else
           break;
       }
     Problem problem = getRandomProblem(folder);
-    System.out.println("Here is your problem:\nProblem: "+problem.getName());
+    p("Here is your problem:\nProblem: "+problem.getName());
     String path = problem.getName();
     ProblemFolder parent = problem.getParent();
     while (parent!=null){
       path = parent.getName()+"\\"+path;
       parent = parent.getParent();
     }
-    System.out.println("Path: "+path+"\n");
-    if (simYN(input, "Mark problem as completed? (y/n): ", false)){
+    p("Path: "+path+"\n");
+    if (simYN("Mark problem as completed? (y/n): ", false)){
       problem.complete();
       updateAllLines(problem);
       updateFile();
-      System.out.println("Updated file.");
+      p("Updated file.");
     }
-    input.close();
-    System.out.println("\n\n");
+    p("\n");
     simulateRandomProblem();
   }
   public Problem getRandomProblem(){
@@ -188,43 +193,43 @@ public class RootProblemFolder extends ProblemFolder{
   public void updateFile() throws java.io.IOException{
     Files.write(Paths.get(path), text);
   }
-  public boolean simYN(Scanner input, String message, boolean supportsBreaks){
+  public static boolean simYN(String message, boolean supportsBreaks){
     String read = "";
     System.out.print(message);
     while (read.equals("")){
-      read = input.nextLine().toLowerCase();
+      read = Input.get().toLowerCase();
       if (read.equals("n")||read.equals("no")||supportsBreaks&&(read.equals("exit")||read.equals("stop")||read.equals("close")))
         return false;
       if (read.equals("y")||read.equals("yes"))
         return true;
       if (!read.equals("")){
-        System.out.println("Invalid response.");
+        p("Invalid response.");
         read = "";
         System.out.print(message);
       }
     }
     return false; // Never reached
   }
-  public String simString(Scanner input, String message, boolean supportsBreaks){
+  public static String simString(String message, boolean supportsBreaks){
     String read = "";
     System.out.print(message);
     while (read.equals("")){
-      read = input.nextLine();
+      read = Input.get();
       if (supportsBreaks&&(read.equals("exit")||read.equals("stop")||read.equals("close")))
         return "";
     }
     return read;
   }
-  public void resetInputFile() throws java.io.IOException{
-    Scanner input = new Scanner(System.in);
-    if (!simYN(input, "Are you sure you would like to reset the input text file to the default? (y/n): ", true))
-      return;
-    input.close();
-    System.out.println("Resetting text file...");
+  public static void resetInputFile(String path) throws java.io.IOException{
+    String divider = "///////////////////////////////////////////////////////////////////////";
+    if (!simYN("\n"+divider+"\nWould you like to reset the input text file to the default? (y/n): ", true)){
+      Files.write(Paths.get(path), Files.readAllLines(Paths.get(path)).stream().map(s -> (s.charAt(0)=='*')?s.substring(1):s).toList());
+      p(divider);
+      return;}
+    p("Resetting text file...");
 
-    text = Files.readAllLines(Paths.get("CodeStepByStep (base).txt"));
-    updateFile();
+    Files.write(Paths.get(path), Files.readAllLines(Paths.get("CodeStepByStep (base).txt")));
 
-    System.out.println("\nFile reset to default.\nRestart program for changes to reflect.");
+    p("\nFile reset to default.\n"+divider);
   }
 }
