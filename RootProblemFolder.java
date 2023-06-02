@@ -157,9 +157,10 @@ public class RootProblemFolder extends ProblemFolder{
       p();
       return;}
     String folder = "Java";
-    if (simYN("Would you like to choose a folder? (y/n): ", false))
+    if (simYN("Would you like to choose a folder? (y/n): ", false)){
+      p("\nPossible folder options: "+getFolderNames().toString()+"\n");
       while (true){
-        folder = simString("Within which folder is the problem? (or \'exit\'): ", true);
+        folder = simString("From which folder would you like your problem to come from? (or \'exit\'): ", true);
         if (folder.equals("")){
           p();
           return;}
@@ -167,7 +168,7 @@ public class RootProblemFolder extends ProblemFolder{
           p("Folder does not exist.");
         else
           break;
-      }
+      }}
     Problem problem = getRandomProblem(folder);
     p("Here is your problem:\nProblem: "+problem.getName());
     String path = problem.getName();
