@@ -155,6 +155,23 @@ public class RootProblemFolder extends ProblemFolder{
   }
 
 // Main random problem methods
+  public void printCompletedProblems(){
+    p("Completed problems:");
+    printCompletedProblems(this, "");
+  }
+  private void printCompletedProblems(ProblemFolder folder, String append){
+    p(append+folder.toString());
+    for (ProblemFolder f:folder.getSubfolders())
+      printCompletedProblems(f, append+"  ");
+    boolean hasCompletedProblems = false;
+    for (Problem pr:folder.getProblems())
+      if (pr.isDone()){
+        p(append+"  "+pr.getName());
+        hasCompletedProblems = true;
+      }
+    if (folder.getProblems().size()>0&&!hasCompletedProblems)
+      p(append+"  The problems in this folder have not been completed.");
+  }
   public void simulateRandomProblem() throws java.io.IOException{
     if (!simYN("\nWould you like to get a random problem? (y/n): ", true)){
       p();
