@@ -11,6 +11,8 @@ class Main {
 
     RootProblemFolder folder = new RootProblemFolder(path);
 
+    folder.getHashMap().forEach((key, value) -> System.out.println(key + "; " + value));
+
     folder.simulateRandomProblem();
 
     Input.close();

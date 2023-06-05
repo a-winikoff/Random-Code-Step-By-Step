@@ -70,7 +70,7 @@ public class RootProblemFolder extends ProblemFolder{
 
     List<String> lowers = getFolderNamesLower();
     for (int n=0; n<folderNames.size(); n++)
-      lowerNameToFolder.put(lowers.get(n), folders.get(n++));
+      lowerNameToFolder.put(lowers.get(n), folders.get(n));
   }
   public static String line0(String filepath) throws java.io.IOException{
     BufferedReader reader = new BufferedReader(new FileReader(new File(filepath)));
@@ -124,6 +124,9 @@ public class RootProblemFolder extends ProblemFolder{
   }
   public List<String> getFolderNamesLower(){
     return folderNames.stream().map(s -> s.toLowerCase()).collect(Collectors.toList());
+  }
+  public HashMap<String,ProblemFolder> getHashMap(){
+    return lowerNameToFolder;
   }
 
 // Text manipulation methods
